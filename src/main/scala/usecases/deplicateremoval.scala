@@ -7,7 +7,11 @@ object RemoveDuplicates {
 
     val session = SparkSession.builder().master("local").appName("dup").getOrCreate()
 
-    val rdd = session.sparkContext.parallelize(Seq(userData("gopi", 27, "salem"), userData("gopi", 27, "salem"), userData("gopi", 27, "salem")))
+    val in =  Seq(userData("gopi", 27, "salem"),
+      userData("gopi", 27, "salem"),
+      userData("gopi", 27, "salem"))
+    val rdd = session.sparkContext.parallelize(in
+    )
 
     val dupRemovedDataset = rdd.map(data => ((data.name, data.age), data)).reduceByKey((val1, _) => val1).map(_._2).collect()
 
